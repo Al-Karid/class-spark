@@ -2,9 +2,10 @@
 
 We achieved the scores below :
 
-|       | accuracy | AUC    |
-| ----- | -------- | ------ |
-| score | 0.9656   | 0.9067 |
+| Classifiers         | accuracy | AUC    |
+| ------------------- | -------- | ------ |
+| Logistic Classifier | 0.9656   | 0.9067 |
+| Random Forest       | _        | _      |
 
 
 
@@ -69,4 +70,3 @@ For this purpose we created a module named **functions** with the following comp
 ​			mName : the metric name to use
 
 ​			***return*** : accuracy, auc
-
