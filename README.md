@@ -1,46 +1,64 @@
 # Low-cost customers
 
+We achieved the scores below :
+
+|       | accuracy | AUC    |
+| ----- | -------- | ------ |
+| score | 0.9656   | 0.9067 |
+
+
+
+### <u>Description</u>
+
 All this project is done with **Spark**
 
 This project is about **predicting low-cost customers** of a given transportation company.
 
-For this purpose we created a module named **functions** with the following components:
+For this purpose we created a module named **functions** with the following components as listed in the doc-string below.
+
+### <u>Doc-string</u>
 
 **<u>functions</u>**
 
 ​	**conversion**
 
-​		cast_columns_of_df(df, cols_to_cast, cols_to_keep, cast_type) 
+> ​		cast_columns_of_df(df, cols_to_cast, cols_to_keep, cast_type) 
+>
 
-​			*return* : same df with cols_to_cast in cast_type
+​			***return*** : same df with cols_to_cast in cast_type
 
 ​	**data**
 
-​		load_data(ss, flocation)
+> ​		load_data(ss, flocation)
+>
 
 ​			ss : spark session
 
 ​			flocation : location of the data, in csv format. The path should only contain data to be loaded
 
-​			*return* : dictionary with loaded data name as key, the data as value
+​			***return*** : dictionary with loaded data name as key, the data as value
 
-​		join_data(dvector, cols_to_keep)
+> ​		join_data(dvector, cols_to_keep)
+>
 
 ​			dvector : vector of data to be joined
 
-​			*return* : one df of joined data from dvector
+​			***return*** : one df of joined data from dvector
 
 ​	**features**
 
-​		input_df(df) : removes missing values
+> ​		input_df(df) : removes missing values
+>
 
-​		preprocessed_df(df, label) : adds features vector to df
+> ​		preprocessed_df(df, label) : adds features vector to df
+>
 
-​			*return* : df with additional features vector
+​			***return*** : df with additional features vector
 
 ​	**models**
 
-​		eval_lr(df, split=[0.4,0.6], enetparam, mName)
+> ​		eval_lr(df, split=[0.4,0.6], enetparam, mName)
+>
 
 ​			df : df with only two columns, the features vector as the first and label as the second
 
@@ -50,4 +68,5 @@ For this purpose we created a module named **functions** with the following comp
 
 ​			mName : the metric name to use
 
-​			*return* : accuracy, auc
+​			***return*** : accuracy, auc
+
