@@ -12,3 +12,7 @@ def join_data(dvector, col_to_keep):
     for v in dvector[1:]:
         joined = joined.join(v, how="left", on=col_to_keep)
     return joined
+
+def split_data(df, split=[0.4,0.6]):
+    train_df, test_df = df.select(df.columns[0],df.columns[1]).randomSplit(split)
+    return train_df, test_df

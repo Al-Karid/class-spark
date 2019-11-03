@@ -1,24 +1,33 @@
-from pyspark.ml.classification import LogisticRegression
+from pyspark.ml.classification import LogisticRegression, RandomForestClassifier
 from pyspark.ml.evaluation import BinaryClassificationEvaluator
+from functions.data import split_data
+
+def get_eval(model, tdf, mName="areaUnderROC"):
+    
+    # Evaluating the model
+    pred = model.evaluate(tdf).predictions
+
+    # Columns
+    tlabels = list(pred.columns)[1]
+
+    # Confusion matrix components
+    tp = pred[(pred.flg_cmd_lowcostIndex == 1.0) & (pred.prediction == 1.0)].count()
+    tn = pred[(pred.flg_cmd_lowcostIndex == 0.0) & (pred.prediction == 0.0)].count()
+
+    # Metrics
+    accuracy = float((tp+tn) /(pred.count()))
+    auc = BinaryClassificationEvaluator(labelCol=tlabels, metricName=mName).evaluate(pred)
+    
+    # Return
+    return accuracy, auc
 
 def eval_lr(df, split=[0.4,0.6], enetparam=0.5, mName="areaUnderROC"):
     
     # Spliting the data
-    train_df, test_df = df.select(df.columns[0],df.columns[1]).randomSplit(split)
+    train_df, test_df = split_data(df, split=split)
     
     # Training the model
-    lr = LogisticRegression(labelCol=df.columns[1], featuresCol=df.columns[0],elasticNetParam=enetparam)
+    lr = LogisticRegression(labelCol=train_df.columns[1], featuresCol=train_df.columns[0],elasticNetParam=enetparam)
     model_lr = lr.fit(train_df)
 
-    # Evaluating the model
-    pred_lr = model_lr.evaluate(test_df).predictions
-
-    # Confusion matrix components
-    tp = pred_lr[(pred_lr.flg_cmd_lowcostIndex == 1.0) & (pred_lr.prediction == 1.0)].count()
-    tn = pred_lr[(pred_lr.flg_cmd_lowcostIndex == 0.0) & (pred_lr.prediction == 0.0)].count()
-
-    # Metrics
-    accuracy = float((tp+tn) /(pred_lr.count()))
-    auc = BinaryClassificationEvaluator(labelCol=df.columns[1], metricName=mName).evaluate(pred_lr)
-
-    return accuracy, auc
+    return get_eval(model_lr, test_df)
