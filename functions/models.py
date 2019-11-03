@@ -13,9 +13,11 @@ def eval_lr(df, split=[0.4,0.6], enetparam=0.5, mName="areaUnderROC"):
     # Evaluating the model
     pred_lr = model_lr.evaluate(test_df).predictions
 
+    # Confusion matrix components
     tp = pred_lr[(pred_lr.flg_cmd_lowcostIndex == 1.0) & (pred_lr.prediction == 1.0)].count()
     tn = pred_lr[(pred_lr.flg_cmd_lowcostIndex == 0.0) & (pred_lr.prediction == 0.0)].count()
 
+    # Metrics
     accuracy = float((tp+tn) /(pred_lr.count()))
     auc = BinaryClassificationEvaluator(labelCol=df.columns[1], metricName=mName).evaluate(pred_lr)
 
