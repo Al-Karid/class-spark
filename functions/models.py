@@ -31,3 +31,16 @@ def eval_lr(df, split=[0.4,0.6], enetparam=0.5, mName="areaUnderROC"):
     model_lr = lr.fit(train_df)
 
     return get_eval(model_lr, test_df)
+
+def eval_rf(df, split=[0.4,0.6], enetparam=0.5, mName="areaUnderROC"):
+    
+    # Spliting the data
+    train_df, test_df = split_data(df, split=split)
+
+    # Training the model
+    model_rf = RandomForestClassifier(labelCol="flg_cmd_lowcostIndex", featuresCol="indexedFeatures",
+                                    maxDepth=15, numTrees=100)
+    model_rf = model_rf.fit(train_df)
+
+    # return
+    return get_eval(model_rf, test_df)
